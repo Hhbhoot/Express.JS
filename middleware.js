@@ -4,6 +4,7 @@ const path = require('path')
 const app = express();
 const morgan = require('morgan');
 
+const date = new Date();
 // middleware
 
 // app.use(express.static('public'))
@@ -33,7 +34,8 @@ const auth = (req,res,next)=>{
 }
 
 app.get('/',auth,(req,res)=>{
-
+ 
+    console.log(req.get('User-Agent'), Date.now(),date.getDay(),date.getFullYear(),date.getMonth()) 
     res.json({ type : "Get method"})
 })
 
