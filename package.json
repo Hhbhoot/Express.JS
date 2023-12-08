@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "hitesh": "nodemon server2.js "
+    "hitesh": "nodemon RestApi.js "
   },
   "author": "",
   "license": "ISC",
