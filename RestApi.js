@@ -5,7 +5,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const productsRoutes = require('./routes/product.routes')
 const userRoutes = require('./routes/user.routes')
-
+const customerRoutes = require('./routes/customer.routes');
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/Hitesh')
@@ -20,7 +20,9 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.use('/product',productsRoutes);
-app.use('/user',userRoutes)
+app.use('/user',userRoutes);
+app.use('/customer',customerRoutes)
+
 
 app.listen(4545,(err)=>{
 

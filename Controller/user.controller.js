@@ -50,3 +50,5 @@ exports.deleteUser = ((req, res) => {
     let data = user.splice(itemIndex, 1);
     res.json({ message: "Delete Succesfull", Data: data })
 })
+
+

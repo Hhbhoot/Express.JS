@@ -12,6 +12,7 @@ const {
 
 
 
+
 productsRoutes.get('/',getAllProduct);
 productsRoutes.get('/:id',getSpecificProduct);
 productsRoutes.post('/',addProduct);
