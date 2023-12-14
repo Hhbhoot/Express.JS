@@ -1,91 +1,111 @@
 const Customer = require("../model/customer.model")
 
-exports.createCustomer = async(req,res)=>{
- 
-    try{
+exports.createCustomer = async (req, res) => {
 
-        const { Name , Description ,Mobile, Number , City} = req.body ;
+    try {
 
-        let customer = await Customer.findOne({Name : Name });
-        if(customer){
-            res.json({ message : "Customer Already Exists.."})
+        const { Name, Description, Mobile, Number, City } = req.body;
+
+        let customer = await Customer.findOne({ Name: Name });
+        if (customer) {
+            res.json({ message: "Customer Already Exists.." })
         }
-        customer = await Customer.create({...req.body});
+        customer = await Customer.create({ ...req.body });
         customer.save();
-        res.status(201).json({message : "Customer Added.." , CustomerData : customer})
-    }catch(err){
+        res.status(201).json({ message: "Customer Added..", CustomerData: customer })
+    } catch (err) {
         console.log(err);
-        res.json({ message : "Internal Server Error.."})
+        res.json({ message: "Internal Server Error.." })
     }
 
 }
 
-exports.getAllCustomer = async(req,res)=>{
- 
-    try{    
-        let customer = await Customer.find();
+exports.getAllCustomer = async (req, res) => {
+
+    try {
+        let customer = await Customer.find({ isDelete: false });
         res.json(customer);
-        
 
-    }catch(err){
+
+    } catch (err) {
         console.log(err);
-        res.json({ message : "Internal Server Error.."})
+        res.json({ message: "Internal Server Error.." })
     }
 
 }
 
-exports.getSpecificCustomer = async(req,res)=>{
- 
-    try{
-        let id  = req.params.id;
-         let customer = await Customer.findById(id);
-        customer.save();
+exports.getSpecificCustomer = async (req, res) => {
 
-        res.json({CustomerData : customer })
-    }catch(err){
+    try {
+        let id = req.params.id;
+        let customer = await Customer.findById(id, { isDelete: false });
+        // customer.save();
+
+        res.json({ CustomerData: customer })
+    } catch (err) {
         console.log(err);
-        res.json({ message : "Internal Server Error.."})
+        res.json({ message: "Internal Server Error.." })
     }
 
 }
- 
-exports.updateCustomer = async(req,res)=>{
 
-    try{
-        let id = req.params.id ;
-        let customer = await Customer.findById(id);
-        if(!customer){
-            res.json({message: "Product Not Found"});
+exports.updateCustomer = async (req, res) => {
+
+    try {
+        let id = req.params.id;
+        let customer = await Customer.findById(id, { isDelete: false });
+        if (!customer) {
+            res.json({ message: "Product Not Found" });
         }
-        customer = await Customer.findByIdAndUpdate({_id:id},{
+        customer = await Customer.findByIdAndUpdate({ _id: id }, {
 
-            $set : {...req.body }
+            $set: { ...req.body }
         },
-        {
-            new : true
-        })
+            {
+                new: true
+            })
         customer.save();
-        res.json({message :"product Updated"  , customer})
+        res.json({ message: "product Updated", customer })
 
     }
-    catch(err){
+    catch (err) {
         console.log(err);
-        res.json({message : "Internal Server Error.."})
+        res.json({ message: "Internal Server Error.." })
     }
 }
 
-exports.deleteCustomer = async (req,res)=>{
-    try{
-        let id = req.params.id ;
+// exports.deleteCustomer = async (req,res)=>{
+//     try{
+//         let id = req.params.id ;
+//         let customer = await Customer.findById(id);
+//         if(!customer){
+//             res.json({ message : "Customer Not Found.."})
+//         }
+//         customer = await Customer.findOneAndDelete({ _id : id})
+//         res.json({ message : "Customer Deleted...",customer})
+//     }
+//     catch(err){
+//         console.log(err);
+//         res.json({ message : "Internal Server Error..."})
+//     }
+// }
+
+// Soft Delete
+
+exports.deleteCustomer = (async (req, res) => {
+    try {
+        let id = req.params.id;
+
         let customer = await Customer.findById(id);
-        if(!customer){
-            res.json({ message : "Customer Not Found.."})
+        if (!customer) {
+            res.json({ message: " Customer Not Found..." })
         }
-        customer = await Customer.findOneAndDelete({ _id : id})
-        res.json({ message : "Customer Deleted...",customer})
+        customer = await Customer.findByIdAndUpdate(customer._id, { isDelete: true }, { new: true })
+        res.json({ message: "Customer Deleted.." })
+
     }
-    catch(err){
+    catch (err) {
         console.log(err);
-        res.json({ message : "Internal Server Error..."})
+        res.json({ message: " Internal Server Eroor...... " })
     }
-}
+})
