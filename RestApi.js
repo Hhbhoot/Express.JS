@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const productsRoutes = require('./routes/product.routes')
 const userRoutes = require('./routes/user.routes')
 const customerRoutes = require('./routes/customer.routes');
+const UserRoutes = require('./routes/User2.routes');
+const app = express();
 
 
 mongoose.connect('mongodb://127.0.0.1:27017/Hitesh')
@@ -14,7 +16,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/Hitesh')
                console.log(err)
   });
 
-const app = express();
+
 
 app.use(express.json());
 app.use(morgan('dev'));
@@ -22,6 +24,7 @@ app.use(morgan('dev'));
 app.use('/product',productsRoutes);
 app.use('/user',userRoutes);
 app.use('/customer',customerRoutes)
+app.use('/api/User',UserRoutes)
 
 
 app.listen(4545,(err)=>{
