@@ -55,7 +55,7 @@ exports.updateCustomer = async (req, res) => {
         let id = req.params.id;
         let customer = await Customer.findById(id, { isDelete: false });
         if (!customer) {
-            res.json({ message: "Product Not Found" });
+            res.json({ message: "Customer Not Found" });
         }
         customer = await Customer.findByIdAndUpdate({ _id: id }, {
 
@@ -65,7 +65,7 @@ exports.updateCustomer = async (req, res) => {
                 new: true
             })
         customer.save();
-        res.json({ message: "product Updated", customer })
+        res.json({ message: "Customer Updated", customer })
 
     }
     catch (err) {

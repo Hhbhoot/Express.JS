@@ -1,5 +1,6 @@
 
-const Product = require('../public/product.json')
+ const Product = require('../public/product.json')
+
 
 
 exports.getAllProduct = ((req, res) => {
