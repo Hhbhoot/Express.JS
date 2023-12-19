@@ -9,6 +9,8 @@ const ProductRoutes = require('./routes/product2.routes');
 const userRoutes = require('./routes/user.routes')
 const customerRoutes = require('./routes/customer.routes');
 const UserRoutes = require('./routes/User2.routes');
+
+
 const port = process.env.PORT ;
 const app = express();
 
@@ -28,7 +30,7 @@ app.use(morgan('dev'));
 app.use('/product',productsRoutes);
 app.use('/user',userRoutes);
 app.use('/customer',customerRoutes);
-app.use('/Product2',ProductRoutes)
+app.use('/api/Product2',ProductRoutes)
 app.use('/api/User',UserRoutes);
 
 

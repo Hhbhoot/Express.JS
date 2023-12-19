@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const verifyToken = require('../helpers/tokenverify');
 const UserSchema = new mongoose.Schema({
 
     FirstName: {

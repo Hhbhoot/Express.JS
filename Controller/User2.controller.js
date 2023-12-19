@@ -1,5 +1,7 @@
 const User = require('../model/User2.model')
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 
 exports.signUp = async (req, res) => {
     try {
@@ -40,9 +42,37 @@ exports.Login = async (req, res) => {
         if (!checkPassword) {
             return res.json({ message: "Password Not Matched.." })
         }
-        res.status(200).json(user)
+        let payload = {
+            userId : user._id
+        }
+        let token = jwt.sign(payload,process.env.SECRET_KEY)
+         console.log(token)
+         res.status(200).json({token , message : "Login Success"});
+
     }
     catch (err) {
         res.status(500).json({ message: "Internal Server Error.." })
     }
+};
+
+exports.getUser = async(req,res)=>{
+    try{
+        res.json(req.user)
+    }
+    catch (err) {
+        res.status(500).json({ message: "Internal Server Error.." })
+    }
+
+};
+
+exports.
+updateUser = async (req,res)=>{
+    try{
+        let user = await User.findByIdAndUpdate(req.user._id,{ $set : {...req.body}},{new : true})
+            res.status(200).json({user , message :"User is updated.."})
+    }
+    catch (err) {
+        res.status(500).json({ message: "Internal Server Error.." })
+    }
+
 }

@@ -11,8 +11,8 @@ const {
 
 ProductRoutes
   .post("/", createProduct)
-  .get("/:id", getAllProduct)
-  .post("/", getSpecificProduct)
+  .get("/", getAllProduct)
+  .get("/:id", getSpecificProduct)
   .put("/:id", updateProduct)
   .delete("/:id", deleteProduct);
 
