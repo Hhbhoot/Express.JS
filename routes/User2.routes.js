@@ -7,7 +7,9 @@ const {
     Login,
     signUp,
     getUser,
-    updateUser
+    updateUser,
+    changePassword
+
 } = require('../Controller/User2.controller');
 
 
@@ -15,5 +17,6 @@ UserRoutes.post('/signUp', signUp)
          .post('/login', Login)
            .get('/getUser', verifyToken, getUser)
            .put('/updateUser', verifyToken, updateUser)
+          .put('/changePassword',verifyToken,changePassword)
 
 module.exports = UserRoutes;

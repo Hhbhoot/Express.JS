@@ -43,11 +43,11 @@ exports.Login = async (req, res) => {
             return res.json({ message: "Password Not Matched.." })
         }
         let payload = {
-            userId : user._id
+            userId: user._id
         }
-        let token = jwt.sign(payload,process.env.SECRET_KEY)
-         console.log(token)
-         res.status(200).json({token , message : "Login Success"});
+        let token = jwt.sign(payload, process.env.SECRET_KEY)
+        console.log(token)
+        res.status(200).json({ token, message: "Login Success" });
 
     }
     catch (err) {
@@ -55,8 +55,8 @@ exports.Login = async (req, res) => {
     }
 };
 
-exports.getUser = async(req,res)=>{
-    try{
+exports.getUser = async (req, res) => {
+    try {
         res.json(req.user)
     }
     catch (err) {
@@ -66,12 +66,42 @@ exports.getUser = async(req,res)=>{
 };
 
 exports.
-updateUser = async (req,res)=>{
-    try{
-        let user = await User.findByIdAndUpdate(req.user._id,{ $set : {...req.body}},{new : true})
-            res.status(200).json({user , message :"User is updated.."})
+    updateUser = async (req, res) => {
+        try {
+            let user = await User.findByIdAndUpdate(req.user._id, { $set: { ...req.body } }, { new: true })
+            res.status(200).json({ user, message: "User is updated.." })
+        }
+        catch (err) {
+            res.status(500).json({ message: "Internal Server Error.." })
+        }
+
+    }
+exports.changePassword = async (req, res) => {
+    try {
+        const { Password, newPassword, confirmNewPassword } = req.body;
+        let checkPassword = await bcrypt.compare(Password, req.user.Password);
+        if (!checkPassword) {
+            res.json({ message: "Invalid Password.." });
+        }
+
+        if (newPassword === confirmNewPassword) {
+          let hashPassword = await bcrypt.hash(newPassword, 10);
+        
+
+        let user = await User.findByIdAndUpdate(req.user._id, { $set: { Password: hashPassword} })
+         user.save();
+
+        return res.json({ message: "Password Updated Successfully.." })
+        }
+        else{
+            return res.json({ message : "newPassword and confirmNewPassword not matched.."})
+        }
+
+
     }
     catch (err) {
+        
+        console.log(err);
         res.status(500).json({ message: "Internal Server Error.." })
     }
 
