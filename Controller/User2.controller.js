@@ -76,33 +76,32 @@ exports.
         }
 
     }
-exports.changePassword = async (req, res) => {
-    try {
-        const { Password, newPassword, confirmNewPassword } = req.body;
-        let checkPassword = await bcrypt.compare(Password, req.user.Password);
-        if (!checkPassword) {
-            res.json({ message: "Invalid Password.." });
-        }
+    exports.changePassword = async (req,res)=>{
 
-        if (newPassword === confirmNewPassword) {
-          let hashPassword = await bcrypt.hash(newPassword, 10);
+        try{
+           const { currentPassword , newPassword,confirmNewPassword} = req.body ;
+            
+           let checkPassword = await bcrypt.compare(currentPassword,req.user.password);
+           if(!checkPassword){
+            console.log("Please Enter correct current password...")
+            res.json({message : "pls Enter correct current password"})
+           }
+           if(newPassword === confirmNewPassword)
+           {
+              let hashPassword = await bcrypt.hash(newPassword,10);
+      
+              let user = await User.findByIdAndUpdate(req.user._id,{ $set : { password : hashPassword}}, { new : true});
+      
+              user.save();
+              res.status(201).json({ message : "Password Upadated bSuccessfully.."})
+           }
+           else{
+            res.json({ message : "Pls enter correct newPasswod and confirmNewPassword.."})
+           }
         
-
-        let user = await User.findByIdAndUpdate(req.user._id, { $set: { Password: hashPassword} })
-         user.save();
-
-        return res.json({ message: "Password Updated Successfully.." })
         }
-        else{
-            return res.json({ message : "newPassword and confirmNewPassword not matched.."})
-        }
-
-
-    }
-    catch (err) {
-        
-        console.log(err);
-        res.status(500).json({ message: "Internal Server Error.." })
-    }
-
-}
+        catch (err) {
+          console.log(err);
+          res.json({ message: "Internal Server Error.." });
+      }
+      }

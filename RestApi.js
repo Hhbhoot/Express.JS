@@ -9,6 +9,7 @@ const ProductRoutes = require('./routes/product2.routes');
 const userRoutes = require('./routes/user.routes')
 const customerRoutes = require('./routes/customer.routes');
 const UserRoutes = require('./routes/User2.routes');
+const cartRoutes = require('./routes/cart.routes');
 
 
 const port = process.env.PORT ;
@@ -32,6 +33,7 @@ app.use('/user',userRoutes);
 app.use('/customer',customerRoutes);
 app.use('/api/Product2',ProductRoutes)
 app.use('/api/User',UserRoutes);
+app.use('/api/cart',cartRoutes);
 
 
 app.listen(port,(err)=>{
