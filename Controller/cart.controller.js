@@ -1,6 +1,6 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require('mongoose')
 const Cart = require("../model/cart.model");
-
+const Product = require("../model/productSchema");
 exports.addToCart = async (req, res) => {
     try {
         const { cartItem, quantity } = req.body;
@@ -10,8 +10,14 @@ exports.addToCart = async (req, res) => {
         if (isCart) {
             res.json({ mesage: "CartItem already exists.." });
         }
+        let isProduct = await Product.findById(cartItem);
+        if(!isProduct){
+            return res.json({message : "Product Not Found.."})
+        }
+        console.log(isProduct);
+
         isCart = await Cart.create({
-            user: req.user._id,
+            user : req.user._id,
             cartItem,
             quantity,
         });
@@ -24,7 +30,6 @@ exports.addToCart = async (req, res) => {
         res.json({ message: "Internal server Error.." });
     }
 };
-
 exports.getAllCarts = async (req, res) => {
     try {
         let cartItem = await Cart.find({ user: req.user._id }, { isDelete: false });
@@ -52,15 +57,37 @@ exports.getCart = async (req, res) => {
 }
 
 exports.updateCart = async (req, res) => {
-
     try {
-        const { qauntity } = req.body;
-        let id = req.query.ProductId ;
-        let cartItem = await Cart.findByIdAndUpdate({ cartItem :id })
-        
-         return res.json({message : "Cart Quantity Updated...",cartItem});
+      let { quantity } = req.body;
+      let cartId = new mongoose.Types.ObjectId(req.query.cartId);
+      let cart = await Cart.findByIdAndUpdate(
+        cartId,
+        { $set: { quantity: quantity } },
+        { isDelete: false }
+      );
+      if (!cart) {
+        return res.json({ message: "Cart not Found..." });
+      }
+      return res.json({ message: "Cart updated Successfully..", cart });
     } catch (err) {
-        console.log(err);
-        res.json({ message: "Internal server Error.." });
+      console.log(err);
+      res.json({ message: "Internal server Error.." });
     }
-}
+  };
+  
+  exports.deleteCart = async (req, res) => {
+    try {
+      let cartId = new mongoose.Types.ObjectId(req.query.id);
+      console.log(cartId);
+      let cart = await Cart.findByIdAndUpdate(cartId, {
+        $set: { isDelete: true },
+      });
+      console.log(cart);
+  
+      return res.json({ message: "Cart Deleted Successfully..", cart });
+    } catch (err) {
+      console.log(err);
+      res.json({ message: "Internal server Error.." });
+    }
+  };
+  
