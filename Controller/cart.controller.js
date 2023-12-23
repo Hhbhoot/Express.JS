@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Cart = require("../model/cart.model");
-const Product = require("../model/productSchema");
+const Product = require("../model/product.model");
 exports.addToCart = async (req, res) => {
     try {
         const { cartItem, quantity } = req.body;
@@ -32,7 +32,24 @@ exports.addToCart = async (req, res) => {
 };
 exports.getAllCarts = async (req, res) => {
     try {
-        let cartItem = await Cart.find({ user: req.user._id }, { isDelete: false });
+        // let cartItem = await Cart.find({ user: req.user._id , isDelete: false });
+        let cartItem = await Cart.aggregate([
+          {
+            $match: { user: req.user._id , isDelete: false }
+          },
+          {
+            $lookup:
+            {
+                from: 'ProductData',
+                localField: 'cartItem',
+                foreignField: _id,
+                as: porduct_details
+            }
+        },
+        {
+            $unwind: "$porduct_details"
+        }
+        ]);
         return res.status(200).json(cartItem)
 
     } catch (err) {

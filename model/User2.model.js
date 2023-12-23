@@ -1,29 +1,33 @@
 const mongoose = require('mongoose');
 const verifyToken = require('../helpers/tokenverify');
-const UserSchema = new mongoose.Schema({
+const userSchema = mongoose.Schema({
 
-    FirstName: {
+    firstname: {
         type: String,
         required: true
     },
-    LastName: {
+    lastname: {
         type: String,
         required: true
     },
-    Email: {
+    email: {
         type: String,
         unique: true,
         required: true
     },
-    Password: {
+    password: {
         type: String,
         required: true
     },
-    Gender: {
+    gender: {
         type : String,
         enum: ['Male', 'Female']
         
+    },
+    token : {
+        type : String,
+        unique : true
     }
 })
 
-module.exports = mongoose.model('UserData', UserSchema)
+module.exports = mongoose.model('userdata', userSchema)
