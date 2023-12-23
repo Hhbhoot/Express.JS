@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const cartSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'userdatas'
+        ref: 'user'
     },
     cartItem: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'productdatas'
+        ref: 'product'
     },
     quantity: {
         type: Number,
@@ -19,4 +19,4 @@ const cartSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('cartdata', cartSchema);
+module.exports = mongoose.model('cart', cartSchema);
