@@ -6,21 +6,22 @@ const jwt = require('jsonwebtoken');
 exports.signUp = async (req, res) => {
     try {
 
-        const { FirstName, LastName, Email, Password, Gender } = req.body;
+        const { firstname, lastname, email, password, gender } = req.body;
 
-        let user = await User.findOne({ Email: Email }, { isDelete: false })
+        let user = await User.findOne({ email: email }, { isDelete: false })
         if (user) {
             return res.json({ message: "User Already Exists.." })
         }
+
         let salt = 10; // devide password into 10 parts and encrypt
-        let hashPassword = await bcrypt.hash(Password, 10);
+        let hashPassword = await bcrypt.hash(password, salt);
         user = await User.create({
-            FirstName, LastName, Email,
-            Password: hashPassword,
-            Gender
+            firstname, lastname, email,
+            password: hashPassword,
+            gender
         });
         user.save();
-        res.status(201).json({ message: " User Added.." });
+        res.status(201).json({ message: " User Added.." ,user});
 
     }
     catch (err) {
@@ -32,13 +33,13 @@ exports.signUp = async (req, res) => {
 
 exports.Login = async (req, res) => {
     try {
-        const { Email, Password } = req.body;
-        let user = await User.findOne({ Email: Email }, { isDelete: false });
+        const { email, password } = req.body;
+        let user = await User.findOne({ email: email }, { isDelete: false });
         if (!user) {
             return res.json({ message: " User Not Found..  " })
         }
 
-        let checkPassword = await bcrypt.compare(Password, user.Password);
+        let checkPassword = await bcrypt.compare(password, user.password);
         if (!checkPassword) {
             return res.json({ message: "Password Not Matched.." })
         }

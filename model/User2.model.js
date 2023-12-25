@@ -23,10 +23,6 @@ const userSchema = mongoose.Schema({
         type : String,
         enum: ['Male', 'Female']
         
-    },
-    token : {
-        type : String,
-        unique : true
     }
 })
 

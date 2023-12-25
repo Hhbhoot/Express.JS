@@ -32,24 +32,7 @@ exports.addToCart = async (req, res) => {
 };
 exports.getAllCarts = async (req, res) => {
     try {
-        // let cartItem = await Cart.find({ user: req.user._id , isDelete: false });
-        let cartItem = await Cart.aggregate([
-          {
-            $match: { user: req.user._id , isDelete: false }
-          },
-          {
-            $lookup:
-            {
-                from: 'ProductData',
-                localField: 'cartItem',
-                foreignField: _id,
-                as: porduct_details
-            }
-        },
-        {
-            $unwind: "$porduct_details"
-        }
-        ]);
+         let cartItem = await Cart.find({ user: req.user._id , isDelete: false }); //.populate('cartItem');
         return res.status(200).json(cartItem)
 
     } catch (err) {

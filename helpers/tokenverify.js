@@ -5,7 +5,6 @@ exports.verifyToken = async (req, res, next) => {
 
     let token = req.headers['authorization'].split(" ")[1];
     // console.log(token)
-
     let { userId } = jwt.verify(token, process.env.SECRET_KEY);
     // console.log(userId)
 
