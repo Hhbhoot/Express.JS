@@ -76,33 +76,25 @@ exports.addToOrder = async (req, res) => {
         }
     }
 
-    exports.updateOrder =  async(req,res)=>{
+    exports.updateOrder = async (req,res)=>{
         try {
-             
-            const id = new mongoose.Types.ObjectId(req.query);
-    
-             let order = await Order.find  ({ user: req.user._id , isDelete : false})
-              console.log(order[0]);
-        
-            
-             let updateOrder = await Order.aggregate([
-                {
-                    $match : {'order[0].items.cartItem' : (id) }
-                }
-             ])
-        
-              console.log(updateOrder)
-               
-                    
-            // res.status(201).json({ mesage : "Updated Order..", order : order})
-  
+            let order = await Order.find({user : req.user._id , isDelete : false})
 
-        } catch (err) {
-            console.log(err);
-            res.status(500).json({ message: "Internal Server Error" });
+            console.log(order)
+
+            let { id , quantity } = req.body ;
+            id = new mongoose.Types.ObjectId(id);
+
+            let cart = await Cart.findById(id) // , {$set : { 'items.cartItem.quantity' : quantity}})
+
+            console.log(cart);
+
+            
+        } catch (error) {
+            
         }
     }
-
+        
     exports.deleteOrder = async (req,res)=>{
         try {
                let id = new mongoose.Types.ObjectId(req.query.id);
