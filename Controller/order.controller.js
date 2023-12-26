@@ -3,7 +3,7 @@ const Order = require('../model/order.model');
 const Product = require('../model/product.model');
 const Cart = require('../model/cart.model');
 const orderRoutes = require('../routes/order.routes');
-const { default: mongoose } = require('mongoose');
+const { default: mongoose, mongo } = require('mongoose');
 
 exports.addToOrder = async (req, res) => {
     try {
@@ -77,23 +77,12 @@ exports.addToOrder = async (req, res) => {
     }
 
     exports.updateOrder = async (req,res)=>{
-        try {
-            let order = await Order.find({user : req.user._id , isDelete : false})
 
-            console.log(order)
-
-            let { id , quantity } = req.body ;
-            id = new mongoose.Types.ObjectId(id);
-
-            let cart = await Cart.findById(id) // , {$set : { 'items.cartItem.quantity' : quantity}})
-
-            console.log(cart);
-
+        
             
-        } catch (error) {
+        
             
         }
-    }
         
     exports.deleteOrder = async (req,res)=>{
         try {
