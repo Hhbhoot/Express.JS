@@ -77,11 +77,38 @@ exports.addToOrder = async (req, res) => {
     }
 
     exports.updateOrder = async (req,res)=>{
+        try{
+            const { quantity} = req.body ;
+            console.log(quantity);
+ 
+            let id = new mongoose.Types.ObjectId(req.query.id) ;
+            let itemid = new mongoose.Types.ObjectId(req.query.itemid);
+            // let itemid = (req.query.itemid)
+            
+            console.log(itemid);
 
         
+
+            // let updateOrder = await Order.updateOne({
+            //     _id : id , 'items.cartItem' : itemid},
+            //     { $set : { 'items.$.quantity' : quantity}}
+            // );
+            console.log(updateOrder);
+            // if(updateOrder.nModified > 0) {
+            //     console.log('Order updated successfully');
+            //     res.status(200).json({ message: 'Order updated successfully' });
+            // } else {
+            //     console.log('Item not found in the order');
+            //     res.status(404).json({ message: 'Item not found in the order' });
+            // }
+
             
-        
-            
+        }
+        catch (err) {
+            console.log(err);
+            res.status(500).json({ message: "Interal Server Error" });
+        }
+             
         }
         
     exports.deleteOrder = async (req,res)=>{
