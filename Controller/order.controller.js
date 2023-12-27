@@ -78,15 +78,15 @@ exports.getAllorder = async (req, res) => {
 exports.updateOrder = async (req, res) => {
   try {
     const { quantity } = req.body;
-    console.log(quantity);
+    // console.log(quantity);
 
     let id = new mongoose.Types.ObjectId(req.query.id);
     let itemid = new mongoose.Types.ObjectId(req.query.itemid);
 
     let order = await Order.findById(id);
-    console.log(order);
+    // console.log(order);
 
-    console.log(itemid);
+    // console.log(itemid);
 
     let updateOrder = await Order.updateOne(
       {
@@ -101,13 +101,13 @@ exports.updateOrder = async (req, res) => {
       let product = await Product.findById(itemid);
 
       let arr = [...order.items];
-      console.log(arr);
+    //   console.log(arr);
       let price = [];
 
       for (let i = 0; i < arr.length; i++) {
         product = await Product.findById(arr[i].cartItem);
         price[i] = product.price;
-        // console.log(price);
+         console.log(price);
       }
       let sum = 0;
 
@@ -118,7 +118,8 @@ exports.updateOrder = async (req, res) => {
 
       let final = await Order.findByIdAndUpdate(id, {
         $set: { totalAmount: sum },
-      });
+      },{ new : true});
+      final.save();
       return res.json({ message: "order updated Successfully", Data: final });
     } else {
       console.log("Item not found in the order");
