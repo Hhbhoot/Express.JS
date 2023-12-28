@@ -15,20 +15,18 @@ const authRoutes = require('./routes/auth.routes');
 const user3Routes = require('./routes/user3.routes');
 const imagePath = path.join(__dirname,'public','images');
 const filePath = path.join(__dirname,'public/pdf');
-
+const { connectDB } = require('./Connection/connectDB');
 
 const port = process.env.PORT ;
 const app = express();
 
-
 //password => Hitesh123@
-mongoose.connect(process.env.MONGO_DB_URL)  
-  .then(() => console.log('MongoDb Connected'))
-  .catch((err)=>{
-               console.log(err)
-  });
+let DbConnect = connectDB; 
+
 
 app.set('view engine','ejs');
+app.set('views',path.resolve('./views'));
+
 app.use(express.urlencoded({ extended : true}));
 app.use(express.json());
 app.use(morgan('dev'));
@@ -53,9 +51,6 @@ app.use('/user2',user3Routes)
 //     }
 //     res.render('index',user)
 // })
-
-
-
 
 app.listen(port,(err)=>{
 
